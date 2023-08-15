@@ -1,25 +1,24 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
-
-    @import url('https://fonts.googleapis.com/css2?family=Caprasimo&display=swap');
+      @import url("https://fonts.googleapis.com/css2?family=Caprasimo&display=swap");
 
       #container {
         border: 1px solid #ffffff;
         border-radius: 20px;
         width: 400px;
         margin: 20px auto;
-        padding: 20px;
+        padding: 10px;
         text-align: center;
         background: #ffffff;
       }
 
       #timer {
         color: rgb(0, 0, 0);
-        font-family: 'Caprasimo', cursive;
+        font-family: "Caprasimo", cursive;
         font-size: 35px;
         margin: 10px auto;
         border: 5px solid rgb(0, 0, 0);
@@ -58,7 +57,7 @@
         width: 90px;
         margin: 10px auto;
         font-size: 14px;
-        height: 50px;
+        height: 35px;
         border-radius: 50px;
       }
 
@@ -77,6 +76,7 @@
       }
     </style>
   </head>
+  <audio id="alarmSound" src="./alarm.mp3"></audio>
   <body>
     <div id="pomodoro-app">
       <div id="container">
@@ -91,8 +91,8 @@
 
         <div id="buttons">
           <button id="work">Work</button>
-          <button id="shortBreak">Short Break</button>
-          <button id="longBreak">Long Break</button>
+          <button id="shortBreak">Pause</button>
+          <button id="stop-song">Song</button>
           <button id="stop">Stop</button>
         </div>
       </div>
@@ -123,9 +123,6 @@
           document.querySelector("#shortBreak").onclick = function () {
             self.startShortBreak.apply(self);
           };
-          document.querySelector("#longBreak").onclick = function () {
-            self.startLongBreak.apply(self);
-          };
           document.querySelector("#stop").onclick = function () {
             self.stopTimer.apply(self);
           };
@@ -138,13 +135,10 @@
           this.fillerHeight = 0;
         },
         startWork: function () {
-          this.resetVariables(25, 0, true);
+          this.resetVariables(1, 0, true);
         },
         startShortBreak: function () {
           this.resetVariables(5, 0, true);
-        },
-        startLongBreak: function () {
-          this.resetVariables(15, 0, true);
         },
         stopTimer: function () {
           this.resetVariables(25, 0, false);
@@ -179,6 +173,17 @@
         timerComplete: function () {
           this.started = false;
           this.fillerHeight = 0;
+
+          // Jouer l'alarme sonore
+          var alarmSound = document.getElementById("alarmSound");
+          alarmSound.play();
+
+          // Activer le bouton Stop pour arrêter l'alarme
+          var stopButton = document.getElementById("stop-song");
+          stopButton.onclick = function () {
+            alarmSound.pause();
+            alarmSound.currentTime = 0; // Réinitialiser la position de lecture
+          };
         },
       };
       window.onload = function () {
